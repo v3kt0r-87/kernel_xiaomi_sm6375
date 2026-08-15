@@ -584,15 +584,15 @@ CLANG_TARGET_FLAGS_s390		:= s390x-linux-gnu
 CLANG_TARGET_FLAGS_x86		:= x86_64-linux-gnu
 CLANG_TARGET_FLAGS		:= $(CLANG_TARGET_FLAGS_$(SRCARCH))
 
-ifeq ($(CROSS_COMPILE),)
-ifeq ($(CLANG_TARGET_FLAGS),)
-$(error Specify CROSS_COMPILE or add '--target=' option to Makefile)
-else
+ifneq ($(CLANG_TRIPLE),)
+CLANG_FLAGS	+= --target=$(CLANG_TRIPLE:%-=%)
+else ifneq ($(CLANG_TARGET_FLAGS),)
 CLANG_FLAGS	+= --target=$(CLANG_TARGET_FLAGS)
-endif # CLANG_TARGET_FLAGS
-else
+else ifneq ($(CROSS_COMPILE),)
 CLANG_FLAGS	+= --target=$(notdir $(CROSS_COMPILE:%-=%))
-endif # CROSS_COMPILE
+else
+$(error Specify CROSS_COMPILE or add '--target=' option to Makefile)
+endif
 
 ifeq ($(LLVM_IAS),0)
 CLANG_FLAGS	+= -fno-integrated-as
