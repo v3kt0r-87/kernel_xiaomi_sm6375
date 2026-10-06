@@ -153,3 +153,11 @@ arch/arm/boot/dts/vendor
 #Ignoring Android.bp link file
 #
 Android.bp
+
+# Build output and toolchain
+/out/
+/clang/
+/tmp/
+*.tar.gz
+*.zip
+
